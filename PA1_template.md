@@ -12,7 +12,8 @@ output:
 2. unzip activity.zip  
 3. read activity.csv and preprocessing data
 
-```{r message=FALSE, comment= '', echo=TRUE}
+
+```r
 ## load package
 library(readr)
 library(tidyr)
@@ -58,7 +59,8 @@ For this part of the assignment, you can ignore the missing values in the datase
 3. Calculate and report the mean and median of the total number of steps taken per day  
 
 ### 2.1 Histogram of the total number of steps taken each day  
-```{r message=FALSE, comment= '', echo=TRUE}
+
+```r
 p <- dataset %>% 
         group_by(date) %>% 
         summarise(total = sum(steps, na.rm = T)) %>% 
@@ -69,13 +71,23 @@ p %>% ggsave(filename = "instructions_fig/Histogram with total steps each day.pn
 print(p)
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
 ### 2.2 Mean and median number of steps taken each day  
-```{r message=FALSE, comment= '', echo=TRUE}
+
+```r
 dataset %>% 
         group_by(date) %>% 
         summarise(total = sum(steps, na.rm = T)) %>% 
         summarise(mean = mean(total, na.rm = T), 
                   median = median(total, na.rm = T))
+```
+
+```
+# A tibble: 1 x 2
+   mean median
+  <dbl>  <int>
+1 9354.  10395
 ```
 
 ## 3. What is the average daily activity pattern?  
@@ -85,7 +97,8 @@ dataset %>%
 
 
 ### 3.1 Time series plot of the average number of steps taken  
-```{r message=FALSE, warning=FALSE, comment= '', echo=TRUE}
+
+```r
 p <- dataset %>% 
         group_by(time) %>% 
         summarise(mean = mean(steps, na.rm = T)) %>% 
@@ -96,11 +109,18 @@ p %>% ggsave(filename = "instructions_fig/Time series plot with average steps ea
 print(p)
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
 ### 3.3 The 5-minute interval that contains the maximum number of steps  
-```{r message=FALSE, comment= '', echo=TRUE}
+
+```r
 dataset %>% 
         filter(steps == max(steps, na.rm = T)) %>% 
         pull(datetime)
+```
+
+```
+[1] "2012-11-27 06:15:00 UTC"
 ```
 
 
@@ -112,12 +132,23 @@ dataset %>%
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day.  
 
 ### 4.1  Total number of missing values  
-```{r message=FALSE, comment= '', echo=TRUE}
+
+```r
 md.pattern(dataset)
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
+```
+      date interval time datetime steps     
+15264    1        1    1        1     1    0
+2304     1        1    1        1     0    1
+         0        0    0        0  2304 2304
+```
+
 ### 4.2  Imputing missing data and create new dataset  
-```{r message=FALSE, comment= '', echo=TRUE}
+
+```r
 ## imputed NA by using mean 
 dataset_imputed <- dataset %>% 
         group_by(time) %>% 
@@ -126,7 +157,8 @@ dataset_imputed <- dataset %>%
 ```
 
 ### 4.3  Histogram of the total number of steps taken each day with NA imputed  
-```{r message=FALSE, comment= '', echo=TRUE}
+
+```r
 p <- dataset_imputed %>% 
         group_by(date) %>% 
         summarise(total = sum(steps, na.rm = T)) %>% 
@@ -137,13 +169,23 @@ p %>% ggsave(filename = "instructions_fig/Histogram with total steps each day af
 print(p)
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+
 ### 4.4  Mean and median total number of steps taken per day
-```{r message=FALSE, comment= '', echo=TRUE}
+
+```r
 dataset_imputed  %>% 
         group_by(date) %>% 
         summarise(total = sum(steps, na.rm = T)) %>% 
         summarise(mean = mean(total, na.rm = T), 
                   median = median(total, na.rm = T))
+```
+
+```
+# A tibble: 1 x 2
+    mean median
+   <dbl>  <dbl>
+1 10766.  10762
 ```
 
 
@@ -154,7 +196,8 @@ dataset_imputed  %>%
 
 
 ### 5.1 Create a new dataset with weekends variable
-```{r message=FALSE, comment= '', echo=TRUE}
+
+```r
 dataset_imputed <- dataset_imputed %>% 
         mutate(wday = wday(date, label = T)) %>% 
         mutate(weekends = case_when(
@@ -164,7 +207,8 @@ dataset_imputed <- dataset_imputed %>%
 ```
 
 ### 5.2 Create a new dataset with weekends variable   
-```{r message=FALSE, comment= '', echo=TRUE}
+
+```r
 p <- dataset_imputed %>% 
         group_by(weekends, time) %>% 
         summarise(mean = mean(steps)) %>% 
@@ -176,5 +220,7 @@ p <- dataset_imputed %>%
 p %>% ggsave(filename = "instructions_fig/Line plot for steps between weekdays and weekends.png", device = 'png')
 print(p)
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
 
