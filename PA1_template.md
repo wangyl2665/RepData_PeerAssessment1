@@ -63,12 +63,23 @@ For this part of the assignment, you can ignore the missing values in the datase
 ```r
 p <- dataset %>% 
         group_by(date) %>% 
-        summarise(total = sum(steps, na.rm = T)) %>% 
+        summarise(total = sum(steps)) %>% 
         ggplot() +
-        geom_col(aes(date, total)) +
+        geom_histogram(aes(total), bins = 10) +
         labs(title="Histogram with total steps each day", x = 'Date', y= 'Total steps')
 p %>% ggsave(filename = "instructions_fig/Histogram with total steps each day.png", device = 'png')
+```
+
+```
+Warning: Removed 8 rows containing non-finite values (stat_bin).
+```
+
+```r
 print(p)
+```
+
+```
+Warning: Removed 8 rows containing non-finite values (stat_bin).
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
@@ -78,16 +89,16 @@ print(p)
 ```r
 dataset %>% 
         group_by(date) %>% 
-        summarise(total = sum(steps, na.rm = T)) %>% 
+        summarise(total = sum(steps)) %>% 
         summarise(mean = mean(total, na.rm = T), 
                   median = median(total, na.rm = T))
 ```
 
 ```
 # A tibble: 1 x 2
-   mean median
-  <dbl>  <int>
-1 9354.  10395
+    mean median
+   <dbl>  <int>
+1 10766.  10765
 ```
 
 ## 3. What is the average daily activity pattern?  
@@ -161,9 +172,9 @@ dataset_imputed <- dataset %>%
 ```r
 p <- dataset_imputed %>% 
         group_by(date) %>% 
-        summarise(total = sum(steps, na.rm = T)) %>% 
+        summarise(total = sum(steps)) %>% 
         ggplot() +
-        geom_col(aes(date, total)) +
+        geom_histogram(aes(total), bins = 10) +
         labs(title="Histogram with total steps each day after imputed for NA", x = 'Date', y= 'Total steps') 
 p %>% ggsave(filename = "instructions_fig/Histogram with total steps each day after imputed for NA.png", device = 'png')
 print(p)

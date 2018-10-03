@@ -61,9 +61,9 @@ For this part of the assignment, you can ignore the missing values in the datase
 ```{r message=FALSE, comment= '', echo=TRUE}
 p <- dataset %>% 
         group_by(date) %>% 
-        summarise(total = sum(steps, na.rm = T)) %>% 
+        summarise(total = sum(steps)) %>% 
         ggplot() +
-        geom_col(aes(date, total)) +
+        geom_histogram(aes(total), bins = 10) +
         labs(title="Histogram with total steps each day", x = 'Date', y= 'Total steps')
 p %>% ggsave(filename = "instructions_fig/Histogram with total steps each day.png", device = 'png')
 print(p)
@@ -73,7 +73,7 @@ print(p)
 ```{r message=FALSE, comment= '', echo=TRUE}
 dataset %>% 
         group_by(date) %>% 
-        summarise(total = sum(steps, na.rm = T)) %>% 
+        summarise(total = sum(steps)) %>% 
         summarise(mean = mean(total, na.rm = T), 
                   median = median(total, na.rm = T))
 ```
@@ -129,9 +129,9 @@ dataset_imputed <- dataset %>%
 ```{r message=FALSE, comment= '', echo=TRUE}
 p <- dataset_imputed %>% 
         group_by(date) %>% 
-        summarise(total = sum(steps, na.rm = T)) %>% 
+        summarise(total = sum(steps)) %>% 
         ggplot() +
-        geom_col(aes(date, total)) +
+        geom_histogram(aes(total), bins = 10) +
         labs(title="Histogram with total steps each day after imputed for NA", x = 'Date', y= 'Total steps') 
 p %>% ggsave(filename = "instructions_fig/Histogram with total steps each day after imputed for NA.png", device = 'png')
 print(p)
